@@ -9,7 +9,7 @@ from dataclasses import dataclass, field
 from typing import Generator
 
 import aiohttp
-from transformers import AutoTokenizer
+from tokenizers import Tokenizer
 
 SECONDS_TO_PAUSE_AFTER_RATE_LIMIT_ERROR = 15
 # 1 ms limits max throughput to 1,000 requests per second
@@ -158,7 +158,7 @@ async def process_api_requests_from_file(
 
     # Initialize tokenizer
     try:
-        tokenizer = AutoTokenizer.from_pretrained(f"voyageai/{model_name}")
+        tokenizer = Tokenizer.from_pretrained(f"voyageai/{model_name}")
     except Exception as e:
         logging.error(f"Error initializing tokenizer: {e}")
         raise e
@@ -337,7 +337,7 @@ def append_to_jsonl(data: list, filename: str) -> None:
 
 
 def num_tokens_consumed_from_request(
-    tokenizer: AutoTokenizer,
+    tokenizer: Tokenizer,
     request_json: dict,
     api_endpoint: str,
 ) -> int:
