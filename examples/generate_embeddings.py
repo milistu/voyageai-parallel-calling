@@ -22,8 +22,8 @@ INPUT_FILE = SCRIPT_DIR / "example_requests_to_parallel_process.jsonl"
 OUTPUT_FILE = SCRIPT_DIR / "results.jsonl"
 PARQUET_FILE = SCRIPT_DIR / "results.parquet"
 
-# Generate 4,000 dummy requests to test the parallel processing script
-n_requests = 4_000
+# Generate 10,000 dummy requests to test the parallel processing script
+n_requests = 10_000
 jobs = [
     {
         "input": f"This is a test sentence {x}",
@@ -50,8 +50,9 @@ asyncio.run(
         max_requests_per_minute=2_000 * 0.8,  # 80% of maximum 2,000 requests per minute
         max_tokens_per_minute=3_000_000
         * 0.8,  # 80% of maximum 3,000,000 tokens per minute
+        conservative_factor=0.2,  # Voyage AI is sensitive to bursting, so start with much lower capacity
         model_name=MODEL_NAME,
-        max_attempts=3,
+        max_attempts=8,
         logging_level=logging.INFO,
     )
 )
